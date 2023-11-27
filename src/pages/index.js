@@ -1,5 +1,4 @@
 import * as React from "react";
-import PianoRollVisualizer from "../PianoRollVisualizer";
 
 const pageStyles = {
     color: "#232129",
@@ -127,7 +126,6 @@ const links = [
 const IndexPage = () => {
     return (
         <main style={pageStyles}>
-            <PianoRollVisualizer></PianoRollVisualizer>
             <h1 style={headingStyles}>
                 Congratulations
                 <br />
