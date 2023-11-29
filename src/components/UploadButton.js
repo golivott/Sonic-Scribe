@@ -1,9 +1,9 @@
 // src/components/UploadButtonComponent.js
-import React, { useRef } from 'react';
-import { FileUpload } from 'primereact/fileupload';
-import { Toast } from 'primereact/toast';
+import React, { useRef } from "react";
+import { FileUpload } from "primereact/fileupload";
+import { Toast } from "primereact/toast";
 
-const UploadButtonComponent = () => {
+const UploadButtonComponent = ({ onFileUpload }) => {
     const toast = useRef(null);
     let file = undefined;
 
@@ -30,9 +30,13 @@ const UploadButtonComponent = () => {
         // event.files == files to upload
         file = event.files[0];
         console.log(file);
+
+        // Uploads file so it can be used elsewhere
+        if (onFileUpload) onFileUpload(file);
+
         // Save file locally if you need it in a url e.x. localhost:8000/{uuid}
         // url = await saveFileLocally(file);
-        toast.current.show({severity: 'success', summary: 'Success', detail: 'Uploaded ' + file.name, life: 2000});
+        toast.current.show({ severity: "success", summary: "Success", detail: "Uploaded " + file.name, life: 2000 });
     }
 
     const onError = (event) => {
@@ -41,7 +45,7 @@ const UploadButtonComponent = () => {
     };
 
     return (
-        <div style={{ width: '50%', margin: '0 auto', padding: '20px', backgroundColor: '#f8f9fa' }}>
+        <div style={{ width: "50%", margin: "0 auto", padding: "20px", backgroundColor: "#f8f9fa" }}>
             <Toast ref={toast} />
             <FileUpload
                 name="files[]"
@@ -50,7 +54,13 @@ const UploadButtonComponent = () => {
                 onError={onError}
                 multiple={false}
                 accept=".mp3,.wav"
-                style={{ width: '100%', backgroundColor: '#007bff', color: '#fff', padding: '10px', borderRadius: '5px' }}
+                style={{
+                    width: "100%",
+                    backgroundColor: "#007bff",
+                    color: "#fff",
+                    padding: "10px",
+                    borderRadius: "5px",
+                }}
             />
         </div>
     );

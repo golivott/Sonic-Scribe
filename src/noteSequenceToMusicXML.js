@@ -169,7 +169,7 @@ export function noteSequenceToMusicXML(noteSequence) {
 }
 
 // This only uses sharps and only works for C Major fix later
-export function getNote(midiPitch) {
+function getNote(midiPitch) {
     const notes = {
         0: "A", // A
         1: "A", // A#

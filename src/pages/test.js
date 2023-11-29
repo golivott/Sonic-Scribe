@@ -1,29 +1,78 @@
 import * as React from "react";
+import { useState, useEffect } from "react";
 import StaffVisualizer from "../components/StaffVisualizer";
 import PianoRollVisualizer from "../components/PianoRollVisualizer";
 import * as mm from "@magenta/music";
-import { noteSequenceToMusicXML, getNote } from "../noteSequenceToMusicXML";
-import { TWINKLE_TWINKLE, ANNA_MAGDALENA_BACH } from "../SampleNoteSequences";
+import { noteSequenceToMusicXML } from "../noteSequenceToMusicXML";
+import UploadButtonComponent from "../components/UploadButton";
+import { initOnsetsAndFrames, transcribeFromAudioFile } from "../transcribe";
 
 const TestPage = () => {
-    const noteSequence = ANNA_MAGDALENA_BACH;
+    const [modelReady, setModelReady] = useState(false);
+    const [file, setFile] = useState(null);
+    const [noteSequence, setNoteSequence] = useState(null);
+
+    useEffect(() => {
+        const init = async () => {
+            try {
+                setModelReady(await initOnsetsAndFrames());
+            } catch (error) {
+                console.error("Error initializing model:", error);
+            }
+        };
+
+        init();
+    }, []);
+
+    useEffect(() => {
+        if (file && modelReady) {
+            const transcribe = async () => {
+                try {
+                    let output = await transcribeFromAudioFile(file);
+                    setNoteSequence(output);
+                } catch (error) {
+                    console.error("Error transcribing file:", error);
+                }
+            };
+
+            transcribe();
+        }
+    }, [file, modelReady]);
+
+    function downloadFile(data, filename, type) {
+        const blob = new Blob([data], { type });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
     return (
         <>
-            <PianoRollVisualizer noteSequence={noteSequence}></PianoRollVisualizer>
-            <StaffVisualizer noteSequence={noteSequence}></StaffVisualizer>
+            {modelReady ? (
+                <>
+                    <UploadButtonComponent onFileUpload={setFile}></UploadButtonComponent>
+                    {file &&
+                        (noteSequence ? (
+                            <>
+                                <PianoRollVisualizer noteSequence={noteSequence}></PianoRollVisualizer>
+                                <StaffVisualizer noteSequence={noteSequence}></StaffVisualizer>
+                            </>
+                        ) : (
+                            <p>Transcribing ...</p>
+                        ))}
+                </>
+            ) : (
+                <p>Loading Model...</p>
+            )}
 
             <button
                 onClick={() => {
-                    const musicXML = noteSequenceToMusicXML(noteSequence); // Your MusicXML string here
-                    const blob = new Blob([musicXML], { type: "application/octet-stream" });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.download = "music.xml";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    const musicXML = noteSequenceToMusicXML(noteSequence);
+                    downloadFile(musicXML, "music.xml", "application/octet-stream");
                 }}
             >
                 Download MusicXML
@@ -32,14 +81,7 @@ const TestPage = () => {
             <button
                 onClick={() => {
                     const midiData = mm.sequenceProtoToMidi(noteSequence);
-                    const blob = new Blob([midiData], { type: "application/octet-stream" });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.href = url;
-                    link.download = "music.midi";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    downloadFile(midiData, "music.midi", "application/octet-stream");
                 }}
             >
                 Download MIDI
