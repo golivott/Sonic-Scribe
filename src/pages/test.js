@@ -1,6 +1,6 @@
 import * as React from "react";
-import StaffVisualizer from "../StaffVisualizer";
-import PianoRollVisualizer from "../PianoRollVisualizer";
+import StaffVisualizer from "../components/StaffVisualizer";
+import PianoRollVisualizer from "../components/PianoRollVisualizer";
 import * as mm from "@magenta/music";
 import { noteSequenceToMusicXML, getNote } from "../noteSequenceToMusicXML";
 import { TWINKLE_TWINKLE, ANNA_MAGDALENA_BACH } from "../SampleNoteSequences";
@@ -12,6 +12,7 @@ const TestPage = () => {
         <>
             <PianoRollVisualizer noteSequence={noteSequence}></PianoRollVisualizer>
             <StaffVisualizer noteSequence={noteSequence}></StaffVisualizer>
+
             <button
                 onClick={() => {
                     const musicXML = noteSequenceToMusicXML(noteSequence); // Your MusicXML string here

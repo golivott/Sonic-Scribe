@@ -1,5 +1,5 @@
 import * as React from "react";
-import PianoRollVisualizer from "../PianoRollVisualizer";
+import PianoRollVisualizer from "../components/PianoRollVisualizer";
 import UploadButtonComponent from "../components/UploadButton";
 
 const pageStyles = {
