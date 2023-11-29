@@ -53,7 +53,7 @@ const UploadButtonComponent = ({ onFileUpload }) => {
                 onSelect={onSelect}
                 onError={onError}
                 multiple={false}
-                accept=".mp3,.wav"
+                accept=".mp3,.wav,.mid,.midi"
                 style={{
                     width: "100%",
                     backgroundColor: "#007bff",

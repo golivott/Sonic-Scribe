@@ -68,7 +68,7 @@ export function noteSequenceToMusicXML(noteSequence) {
             //  </notations>`;
             for (let noteLength of Object.keys(NOTE_TYPES).sort((a, b) => b - a)) {
                 if (newFixedNotes[newFixedNotes.length - 1].duration > noteLength) {
-                    newFixedNotes[newFixedNotes.length - 1].noteType = NOTE_TYPES[noteLength];
+                    newFixedNotes[newFixedNotes.length - 1].noteType = NOTE_TYPES[noteLength]; // for now we are just using the closest note that will fit need to implement note tieing
                     //             // Adding a new adjusted note
                     //             let thisIndex = newFixedNotes.length - 1;
                     //             let nextIndex = thisIndex + 1;

@@ -26,16 +26,41 @@ const TestPage = () => {
 
     useEffect(() => {
         if (file && modelReady) {
-            const transcribe = async () => {
-                try {
-                    let output = await transcribeFromAudioFile(file);
-                    setNoteSequence(output);
-                } catch (error) {
-                    console.error("Error transcribing file:", error);
-                }
-            };
+            if (file.name.split(".")[1] === "mid" || file.name.split(".")[1] === "midi") {
+                function createArray(file) {
+                    return new Promise((resolve, reject) => {
+                        const reader = new FileReader();
 
-            transcribe();
+                        reader.onload = (event) => {
+                            const result = reader.result;
+                            resolve(result);
+                        };
+
+                        reader.onerror = (event) => {
+                            reject(reader.error);
+                        };
+
+                        reader.readAsArrayBuffer(file);
+                    });
+                }
+
+                const createNoteSequence = async () => {
+                    setNoteSequence(mm.midiToSequenceProto(await createArray(file)));
+                };
+
+                createNoteSequence();
+            } else {
+                const transcribe = async () => {
+                    try {
+                        let output = await transcribeFromAudioFile(file);
+                        setNoteSequence(output);
+                    } catch (error) {
+                        console.error("Error transcribing file:", error);
+                    }
+                };
+
+                transcribe();
+            }
         }
     }, [file, modelReady]);
 

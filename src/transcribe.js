@@ -1,4 +1,5 @@
 import { OnsetsAndFrames } from "@magenta/music/esm/transcription";
+import { openDB } from "idb";
 
 let model;
 let modelReady = false; // Use this bool to check if the model is ready
@@ -6,16 +7,32 @@ let modelReady = false; // Use this bool to check if the model is ready
 // Downloads model
 export async function initOnsetsAndFrames() {
     if (modelReady) return true; // If the model is loaded return true
+
+    // Create a storage location for this model
+    const db = await openDB("my-database", 1, {
+        upgrade(db) {
+            db.createObjectStore("models");
+        },
+    });
+
+    // Try to retrieve the model from the user cache
+    model = await db.get("models", "onsetsAndFrames");
+
+    // If the user doesn't have the model download it
     if (!model) {
+        console.log("Downloading Model ...");
         model = new OnsetsAndFrames(
             "https://storage.googleapis.com/magentadata/js/checkpoints/transcription/onsets_frames_uni"
         );
 
         await model.initialize();
-        modelReady = true;
-        return true;
+        await db.put("models", model, "onsetsAndFrames");
+    } else {
+        console.log("Found model in indexedDB!");
     }
-    return false;
+
+    modelReady = true;
+    return true;
 }
 
 // Transcribes audio file to a note sequence
