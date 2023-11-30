@@ -30,7 +30,7 @@ export async function transcribeFromAudioFile(file) {
 
     // Transcribe the audio file
     const noteSequence = await model.transcribeFromAudioFile(blob);
-    console.log(noteSequence);
+    console.log(JSON.stringify(noteSequence.notes));
 
     return noteSequence;
 }
