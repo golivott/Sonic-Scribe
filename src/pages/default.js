@@ -125,7 +125,7 @@ const links = [
     },
 ];
 
-const IndexPage = () => {
+const DefaultPage = () => {
     return (
         <main style={pageStyles}>
             <UploadButtonComponent></UploadButtonComponent>
@@ -174,6 +174,6 @@ const IndexPage = () => {
     );
 };
 
-export default IndexPage;
+export default DefaultPage;
 
 export const Head = () => <title>Home Page</title>;

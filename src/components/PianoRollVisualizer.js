@@ -6,9 +6,7 @@ import * as mm from "@magenta/music";
 export default function PianoRollVisualizer({ visualizerType, noteSequence }) {
     const visualizerRef = useRef(null);
     const [visualizer, setVisualizer] = useState(null);
-    const player = new mm.Player(false, {
-        run: (note) => visualizer.redraw(note),
-    });
+    const [player, setPlayer] = useState(null);
 
     useEffect(() => {
         if (noteSequence) {
@@ -18,6 +16,12 @@ export default function PianoRollVisualizer({ visualizerType, noteSequence }) {
             const visualizer = new mm.PianoRollCanvasVisualizer(notes, visualizerRef.current);
             setVisualizer(visualizer);
             visualizer.redraw();
+
+            setPlayer(
+                new mm.Player(false, {
+                    run: (note) => visualizer.redraw(note),
+                })
+            );
         }
     }, [noteSequence]);
 

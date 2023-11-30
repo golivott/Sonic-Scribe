@@ -7,7 +7,7 @@ import { noteSequenceToMusicXML } from "../noteSequenceToMusicXML";
 import UploadButtonComponent from "../components/UploadButton";
 import { initOnsetsAndFrames, transcribeFromAudioFile } from "../transcribe";
 
-const TestPage = () => {
+const IndexPage = () => {
     const [modelReady, setModelReady] = useState(false);
     const [file, setFile] = useState(null);
     const [noteSequence, setNoteSequence] = useState(null);
@@ -115,6 +115,6 @@ const TestPage = () => {
     );
 };
 
-export default TestPage;
+export default IndexPage;
 
 export const Head = () => <title>Test Page</title>;
