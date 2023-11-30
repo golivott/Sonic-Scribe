@@ -1,4 +1,5 @@
 import * as mm from "@magenta/music/esm";
+import { quantizeNoteSequence } from "@magenta/music/esm/core/sequences";
 import { TWINKLE_TWINKLE_2 } from "./SampleNoteSequences";
 import * as _ from "lodash";
 
@@ -18,6 +19,61 @@ const NOTE_TYPES = {
     4096: "long",
     8192: "maxima",
 };
+
+export function noteSequenceToMusicXML(noteSequence) {
+    // Ensure sequence is quantized
+    if (!noteSequence.isQuantizedSequence) noteSequence = quantizeNoteSequence(noteSequence);
+
+    function timeToQuarters(time) {
+        const q = time * noteSequence.tempos[0].qpm / 60;
+        return Math.round(q * 16) / 16; // min resolution = 1/16 quarter
+    }
+
+    function getNoteInfo(note) {
+        const startQ = timeToQuarters(note.startTime);
+        const endQ = timeToQuarters(note.endTime);
+        return {
+            start: startQ,
+            length: endQ - startQ,
+            pitch: note.pitch,
+            intensity: note.velocity
+        };
+    }
+
+    function getScoreInfo() {
+        const notesInfo = [];
+        sequence.notes.forEach((note) => {
+            if (this.isNoteInInstruments(note)) {
+                notesInfo.push(getNoteInfo(note));
+            }
+        });
+        return {
+            notes: notesInfo,
+            tempos: sequence.tempos ?
+                sequence.tempos.map((t) => {
+                    return { start: this.timeToQuarters(t.time), qpm: t.qpm };
+                }) :
+                [],
+            keySignatures: sequence.keySignatures ?
+                sequence.keySignatures.map((ks) => {
+                    return { start: this.timeToQuarters(ks.time), key: ks.key };
+                }) :
+                [],
+            timeSignatures: sequence.timeSignatures ?
+                sequence.timeSignatures.map((ts) => {
+                    return {
+                        start: this.timeToQuarters(ts.time),
+                        numerator: ts.numerator,
+                        denominator: ts.denominator
+                    };
+                }) :
+                []
+        };
+    }
+}
+
+
+
 
 export function noteSequenceToMusicXML(noteSequence) {
     let noteSeq = new mm.NoteSequence(noteSequence || TWINKLE_TWINKLE_2);
@@ -176,8 +232,8 @@ export function noteSequenceToMusicXML(noteSequence) {
                 ${note.dot ? "<dot />" : ""}
                 <notations>
                     ${note.notations.reduce((acc, currVal) => {
-                        return acc + currVal + "\n";
-                    }, "")}
+            return acc + currVal + "\n";
+        }, "")}
 				</notations>
             </note>`;
     }
