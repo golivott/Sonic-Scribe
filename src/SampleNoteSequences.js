@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 
-import * as mm from "@magenta/music";
-
-export const TWINKLE_TWINKLE = new mm.NoteSequence({
+export const TWINKLE_TWINKLE = {
     notes: [
         { pitch: 60, startTime: 0.0, endTime: 0.5 },
         { pitch: 60, startTime: 0.5, endTime: 1.0 },
@@ -35,9 +33,9 @@ export const TWINKLE_TWINKLE = new mm.NoteSequence({
         { pitch: 60, startTime: 7.0, endTime: 8.0 },
     ],
     totalTime: 8,
-});
+};
 
-export const TWINKLE_TWINKLE_2 = new mm.NoteSequence({
+export const TWINKLE_TWINKLE_2 = {
     notes: [
         { pitch: 60, velocity: 61, startTime: 0.608, endTime: 1.28 },
         { pitch: 48, velocity: 55, startTime: 0.64, endTime: 1.8880000000000001 },
@@ -131,9 +129,9 @@ export const TWINKLE_TWINKLE_2 = new mm.NoteSequence({
         { pitch: 60, velocity: 71, startTime: 29.696, endTime: 33.28 },
     ],
     totalTime: 34,
-});
+};
 
-export const DOUBLE_SCALE = new mm.NoteSequence({
+export const DOUBLE_SCALE = {
     notes: [
         { pitch: 60, quantizedStartStep: 0, quantizedEndStep: 1, program: 0 },
         { pitch: 61, quantizedStartStep: 1, quantizedEndStep: 2, program: 0 },
@@ -165,9 +163,46 @@ export const DOUBLE_SCALE = new mm.NoteSequence({
     timeSignatures: [{ time: 0, numerator: 2, denominator: 4 }],
     totalQuantizedSteps: 24,
     quantizationInfo: { stepsPerQuarter: 2 },
-});
+};
 
-export const STAFF_USE_CASES = new mm.NoteSequence({
+export const DOUBLE_SCALE_TIME_SIG_CHANGE = {
+    notes: [
+        { pitch: 60, quantizedStartStep: 0, quantizedEndStep: 1, program: 0 },
+        { pitch: 61, quantizedStartStep: 1, quantizedEndStep: 2, program: 0 },
+        { pitch: 62, quantizedStartStep: 2, quantizedEndStep: 3, program: 0 },
+        { pitch: 63, quantizedStartStep: 3, quantizedEndStep: 4, program: 0 },
+        { pitch: 64, quantizedStartStep: 4, quantizedEndStep: 5, program: 0 },
+        { pitch: 65, quantizedStartStep: 5, quantizedEndStep: 6, program: 0 },
+        { pitch: 66, quantizedStartStep: 6, quantizedEndStep: 7, program: 0 },
+        { pitch: 67, quantizedStartStep: 7, quantizedEndStep: 8, program: 0 },
+        { pitch: 68, quantizedStartStep: 8, quantizedEndStep: 9, program: 0 },
+        { pitch: 69, quantizedStartStep: 9, quantizedEndStep: 10, program: 0 },
+        { pitch: 70, quantizedStartStep: 10, quantizedEndStep: 11, program: 0 },
+        { pitch: 71, quantizedStartStep: 11, quantizedEndStep: 12, program: 0 },
+        { pitch: 72, quantizedStartStep: 12, quantizedEndStep: 13, program: 0 },
+        { pitch: 73, quantizedStartStep: 13, quantizedEndStep: 14, program: 0 },
+        { pitch: 74, quantizedStartStep: 14, quantizedEndStep: 15, program: 0 },
+        { pitch: 75, quantizedStartStep: 15, quantizedEndStep: 16, program: 0 },
+        { pitch: 76, quantizedStartStep: 16, quantizedEndStep: 17, program: 0 },
+        { pitch: 77, quantizedStartStep: 17, quantizedEndStep: 18, program: 0 },
+        { pitch: 78, quantizedStartStep: 18, quantizedEndStep: 19, program: 0 },
+        { pitch: 79, quantizedStartStep: 19, quantizedEndStep: 20, program: 0 },
+        { pitch: 80, quantizedStartStep: 20, quantizedEndStep: 21, program: 0 },
+        { pitch: 81, quantizedStartStep: 21, quantizedEndStep: 22, program: 0 },
+        { pitch: 82, quantizedStartStep: 22, quantizedEndStep: 23, program: 0 },
+        { pitch: 83, quantizedStartStep: 23, quantizedEndStep: 24, program: 0 },
+    ],
+    tempos: [{ time: 0, qpm: 140 }],
+    keySignatures: [{ time: 0, key: 0 }],
+    timeSignatures: [
+        { time: 0, numerator: 2, denominator: 4 },
+        { time: 2, numerator: 4, denominator: 4 },
+    ],
+    totalQuantizedSteps: 24,
+    quantizationInfo: { stepsPerQuarter: 2 },
+};
+
+export const STAFF_USE_CASES = {
     notes: [
         { pitch: 65, startTime: 0, endTime: 4, program: 0, velocity: 128 },
         { pitch: 65, startTime: 8, endTime: 10, program: 0, velocity: 112 },
@@ -193,9 +228,9 @@ export const STAFF_USE_CASES = new mm.NoteSequence({
     keySignatures: [{ time: 0, key: 0 }],
     timeSignatures: [{ time: 0, numerator: 4, denominator: 4 }],
     totalTime: 36,
-});
+};
 
-export const ANNA_MAGDALENA_BACH = new mm.NoteSequence({
+export const ANNA_MAGDALENA_BACH = {
     ticksPerQuarter: 480,
     timeSignatures: [{ time: 0, numerator: 3, denominator: 4 }],
     tempos: [{ time: 0, qpm: 120 }],
@@ -2039,4 +2074,4 @@ export const ANNA_MAGDALENA_BACH = new mm.NoteSequence({
     ],
     totalTime: 48,
     sourceInfo: { encodingType: 3, parser: 6 },
-});
+};

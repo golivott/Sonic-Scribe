@@ -2,7 +2,7 @@ import * as mm from "@magenta/music";
 import { DEFAULT_KEY_SIGNATURE, DEFAULT_TEMPO, DEFAULT_TIME_SIGNATURE, NoteInfo, StaffInfo, TimeSignatureInfo, getBarLength } from "./staff_info";
 import { SEQUENCE_KEY_TO_FIFTHS } from "./constants";
 
-export function noteSequenceToMusicXML(noteSequence: mm.INoteSequence): string {
+export function noteSequenceToMusicXML(noteSequence: mm.INoteSequence) {
     let staffInfo = getStaffInfo(noteSequence);
 
     for (let note of staffInfo.notes) {
@@ -11,16 +11,26 @@ export function noteSequenceToMusicXML(noteSequence: mm.INoteSequence): string {
 }
 
 /** Gets measure number at division */
-function getMeasure(division: number, timeSignatures: TimeSignatureInfo[]): number {
+export function getMeasure(division: number, timeSignatures: TimeSignatureInfo[]): number {
     let currMeasure = 0;
-    for (let [i, timeSignature] of timeSignatures.entries()) {
-        let measureLength = 256 * getBarLength(timeSignature);
-        let measuresAtTimeSignature;
-        if (i == timeSignatures.length - 1) measuresAtTimeSignature = (division - timeSignature.start) / measureLength; // This is the last measure
-        else measuresAtTimeSignature = (timeSignatures[i + 1].start - timeSignature.start) / measureLength; // There are other time signature changes
+    let currDivison = 0;
+    let i = 0;
+    while (i < timeSignatures.length - 1) {
+        // Calculate how many measures occur at this time sig
+        let measureLength = 256 * getBarLength(timeSignatures[i]);
+        let measuresAtTimeSignature = (timeSignatures[i + 1].start - timeSignatures[i].start) / measureLength;
+        // Check if we have passed the division we are trying to find
+        if(currDivison + measuresAtTimeSignature * measureLength > division) break; 
 
         currMeasure += measuresAtTimeSignature;
+        currDivison += measuresAtTimeSignature * measureLength;
+        
+        i++;
     }
+
+    let measureLength = 256 * getBarLength(timeSignatures[i]);
+    currMeasure += (division - timeSignatures[i].start) / measureLength;
+    console.log(currMeasure)
 
     return Math.floor(currMeasure) + 1;
 }
@@ -44,7 +54,7 @@ function getNoteInfo(note: mm.NoteSequence.INote): NoteInfo {
 }
 
 /** Converts a note sequence to a staff info */
-function getStaffInfo(sequence: mm.INoteSequence): StaffInfo {
+export function getStaffInfo(sequence: mm.INoteSequence): StaffInfo {
     const notesInfo = [];
     for (let note of sequence.notes) {
         notesInfo.push(getNoteInfo(note));
